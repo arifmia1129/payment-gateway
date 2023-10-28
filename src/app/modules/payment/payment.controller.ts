@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import sendResponse from '../../../shared/response';
 import httpStatus from 'http-status';
 import { PaymentInitService } from './payment.service';
+import pick from '../../../shared/pick';
+import { paymentFilterableFields } from './payment.constant';
 
 const createPaymentSession = async (req: Request, res: Response, next: NextFunction) => {
   const result = await PaymentInitService.createPaymentSession(req.body);
@@ -31,7 +33,25 @@ const paymentValidate = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+const getAllPayment = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const filters = pick(req.query, paymentFilterableFields);
+    const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+    const result = await PaymentInitService.getAllPayment(filters, options);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Successfully retrieved all payment',
+      meta: result.meta,
+      data: result.data
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const PaymentInitController = {
   createPaymentSession,
-  paymentValidate
+  paymentValidate,
+  getAllPayment
 };
