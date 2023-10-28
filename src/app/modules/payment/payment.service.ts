@@ -1,3 +1,5 @@
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/apiError';
 import prisma from '../../../shared/prisma';
 import { SslService } from '../ssl/ssl.service';
 
@@ -28,8 +30,32 @@ const createPaymentSession = async (payload: any): Promise<string | null> => {
   }
 };
 
-const paymentValidate = async (valId: string) => {
-  const res = await SslService.paymentValidate(valId);
+const paymentValidate = async (payload: any) => {
+  if (!payload || payload.status !== 'VALID') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid payment validation request');
+  }
+
+  const res = await SslService.paymentValidate(payload?.val_id);
+
+  if (res.status === 'VALID') {
+    const isPaymentInfoExist = await prisma.payment.findFirst({
+      where: {
+        transId: payload.trans_id
+      }
+    });
+    if (isPaymentInfoExist) {
+      await prisma.payment.update({
+        where: {
+          id: isPaymentInfoExist.id
+        },
+        data: {
+          status: 'PAID',
+          transId: payload?.trans_id
+        }
+      });
+    }
+  }
+
   return res;
 };
 
