@@ -1,5 +1,7 @@
 import axios from 'axios';
 import config from '../../../config';
+import ApiError from '../../../errors/apiError';
+import httpStatus from 'http-status';
 
 const createSslSession = async (payload: any) => {
   const data = {
@@ -40,6 +42,19 @@ const createSslSession = async (payload: any) => {
   return res;
 };
 
+export const paymentValidate = async (valId: string) => {
+  try {
+    const { data } = await axios.get(
+      `${config.ssl.sslValidationUrl}?store_id=${config.ssl.storeId}&store_passwd=${config.ssl.storePass}&val_id=${valId}`
+    );
+
+    return data;
+  } catch (error: any) {
+    throw new ApiError(httpStatus.BAD_REQUEST, error?.message);
+  }
+};
+
 export const SslService = {
-  createSslSession
+  createSslSession,
+  paymentValidate
 };

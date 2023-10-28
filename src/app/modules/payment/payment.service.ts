@@ -28,6 +28,12 @@ const createPaymentSession = async (payload: any): Promise<string | null> => {
   }
 };
 
+const paymentValidate = async (valId: string) => {
+  const res = await SslService.paymentValidate(valId);
+  return res;
+};
+
 export const PaymentInitService = {
-  createPaymentSession
+  createPaymentSession,
+  paymentValidate
 };
