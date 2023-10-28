@@ -3,6 +3,6 @@ import { PaymentInitController } from './payment.controller';
 
 const router = express.Router();
 
-router.post('/init', PaymentInitController.paymentInit);
+router.post('/init', PaymentInitController.createPaymentSession);
 
 export const PaymentInitRouter = router;

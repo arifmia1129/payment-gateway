@@ -3,9 +3,8 @@ import sendResponse from '../../../shared/response';
 import httpStatus from 'http-status';
 import { PaymentInitService } from './payment.service';
 
-const paymentInit = async (req: Request, res: Response, next: NextFunction) => {
-  const result = await PaymentInitService.paymentInit();
-
+const createPaymentSession = async (req: Request, res: Response, next: NextFunction) => {
+  const result = await PaymentInitService.createPaymentSession(req.body);
   try {
     sendResponse(res, {
       success: true,
@@ -19,5 +18,5 @@ const paymentInit = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const PaymentInitController = {
-  paymentInit
+  createPaymentSession
 };
