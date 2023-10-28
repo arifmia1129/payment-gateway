@@ -8,8 +8,8 @@ const createPaymentSession = async (req: Request, res: Response, next: NextFunct
   try {
     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.OK,
-      message: 'Success',
+      statusCode: httpStatus.CREATED,
+      message: 'Successfully created payment session',
       data: result
     });
   } catch (error) {
