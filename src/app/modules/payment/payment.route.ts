@@ -6,5 +6,6 @@ const router = express.Router();
 router.post('/init', PaymentInitController.createPaymentSession);
 router.post('/validate', PaymentInitController.paymentValidate);
 router.get('/', PaymentInitController.getAllPayment);
+router.get('/:id', PaymentInitController.getPaymentById);
 
 export const PaymentInitRouter = router;

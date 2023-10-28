@@ -49,9 +49,23 @@ const getAllPayment = async (req: Request, res: Response, next: NextFunction) =>
     next(error);
   }
 };
+const getPaymentById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await PaymentInitService.getPaymentById(req.params.id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Successfully retrieved  payment by ID',
+      data: result
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const PaymentInitController = {
   createPaymentSession,
   paymentValidate,
-  getAllPayment
+  getAllPayment,
+  getPaymentById
 };

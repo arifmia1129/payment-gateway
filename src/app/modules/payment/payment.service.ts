@@ -118,8 +118,27 @@ const getAllPayment = async (filters: any, options: any): Promise<IGenericRespon
   };
 };
 
+export const getPaymentById = async (paymentId: string) => {
+  if (!paymentId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Payment ID is required');
+  }
+
+  const isExist = await prisma.payment.findUnique({
+    where: {
+      id: paymentId
+    }
+  });
+
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to find payment by given payment ID');
+  }
+
+  return isExist;
+};
+
 export const PaymentInitService = {
   createPaymentSession,
   paymentValidate,
-  getAllPayment
+  getAllPayment,
+  getPaymentById
 };
